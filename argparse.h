@@ -2,11 +2,11 @@
 #define ARGPARSE_H_
 
 #include "result.h"
-
+#include "stdbool.h"
 
 typedef enum  {
-    COMPRESS,
-    DECOMPRESS
+    COMMAND_COMPRESS,
+    COMMAND_DECOMPRESS
 } command_e;
 
 typedef enum  {
@@ -17,13 +17,13 @@ typedef enum  {
 } compression_algorithm_t;
 
 typedef struct {
-    char file[256];
-    char strength;
+    char* file;
+    bool verbose;
     compression_algorithm_t algorithm;
 } compress_command_t;
 
 typedef struct {
-    char file[255];
+    char* file;
     compression_algorithm_t algorithm;
 } decompress_command_t;
 
@@ -32,8 +32,9 @@ typedef struct {
     union {
         compress_command_t compression_command;
         decompress_command_t decompression_command;
-    } args;
+    };
 } parsed_arguments_t;
+// maybe consider simplifying to flat structure for now
 
 
 typedef struct
@@ -43,9 +44,8 @@ typedef struct
     {
         parsed_arguments_t parsed_args;
         char* error_msg;
-    } result;
+    };
 } result_parsed_argument_t;
-
 
 result_parsed_argument_t parse_args(int argc, char *argv[]);
 
