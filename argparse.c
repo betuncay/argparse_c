@@ -5,6 +5,7 @@
 
 char* DEFAULT_MESSAGE = "Incorrect usage. To use this program do blablabla...";
 
+// #TODO Assert that length of array == COMPRESSION_ALGORITHMS_MAX
 char* compression_algorithm_string_map[] = {
     [RUN_LENGHT_ENCODING] = "run_length_encoded",
     [HUFFMAN_ENCODING] = "huffman_encoding",
@@ -28,8 +29,6 @@ result_char_ptr_t get_compression_algorithm_string(compression_algorithm_t compr
     
     return result;
 }
-// #TODO Assert that length of array == COMPRESSION_ALGORITHMS_MAX
-
 
 // example input arguments:
 // program.exe compress --file somefile --algorithm lzh --strength 123
@@ -51,13 +50,13 @@ typedef enum {
 int state = 0;
 
 arg_state_e arg_state = ARGS_STATE_START;
-arg_state_e arg_state_visited[ARGS_MAX_VALUE] = {0};
+int arg_state_visited[ARGS_MAX_VALUE] = {0};
 
 
 result_parsed_argument_t parse_args(int argc, char *argv[])
 {
     result_parsed_argument_t result;
-    for (int i = 0; i < argc; ++i)
+    for (int i = 1; i < argc; ++i)
     {
         char* token = argv[i];
         switch (state)
@@ -146,8 +145,6 @@ result_parsed_argument_t parse_args(int argc, char *argv[])
             }
 
         }
-
-        arg_state_visited[state]++;
         printf("%s, (State: %d)\n", argv[i], state);
     }
     return result;
