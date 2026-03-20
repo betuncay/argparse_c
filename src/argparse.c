@@ -5,6 +5,8 @@
 
 char* DEFAULT_MESSAGE = "Incorrect usage. To use this program do blablabla...";
 
+char RESULT_MESSAGE[256];
+
 // #TODO Assert that length of array == COMPRESSION_ALGORITHMS_MAX
 char* compression_algorithm_string_map[] = {
     [RUN_LENGHT_ENCODING] = "run_length_encoded",
@@ -89,7 +91,8 @@ result_parsed_argument_t parse_args(int argc, char *argv[])
                 else 
                 {
                     result.result_type = RESULT_ERROR;
-                    result.error_msg = DEFAULT_MESSAGE;
+                    sprintf_s(RESULT_MESSAGE, 256, "Unknown argument: %s\nExiting...", token);
+                    result.error_msg = RESULT_MESSAGE;
                     return result;
                 }
                 break;
