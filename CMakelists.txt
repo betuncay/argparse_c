@@ -1,8 +1,11 @@
 cmake_minimum_required(VERSION 3.23)
-
 project(CArgs)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+
+# if googletest is enabled xd
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(${PROJECT_NAME})
 
@@ -11,3 +14,30 @@ target_sources(${PROJECT_NAME}
     src/main.c
     src/argparse.c
 )
+
+option(BUILD_TESTING "Build tests" OFF)
+
+if(BUILD_TESTING)
+  include(FetchContent)
+  FetchContent_Declare(
+    googletest
+    URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+  )
+  # For Windows: Prevent overriding the parent project's compiler/linker settings
+  set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+  FetchContent_MakeAvailable(googletest)
+
+  enable_testing()
+  include(GoogleTest)
+
+  add_executable(
+    ${PROJECT_NAME}_test
+    test/argparse_test.cpp
+  )
+  target_link_libraries(
+    ${PROJECT_NAME}_test
+    GTest::gtest_main
+  )
+
+  gtest_discover_tests(${PROJECT_NAME}_test)
+endif()

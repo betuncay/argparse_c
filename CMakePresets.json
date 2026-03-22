@@ -7,17 +7,42 @@
       "generator": "Ninja",
       "hidden": true,
       "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++"
       }
     },
     {
-      "name": "clang-debug",
+      "name": "app",
+      "displayName": "App (Debug)",
       "inherits": "base",
-      "binaryDir": "build/debug",
+      "binaryDir": "build/app",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_C_COMPILER": "clang",
-        "CMAKE_CXX_COMPILER": "clang"
+        "BUILD_TESTING": "OFF"
       }
+    },
+    {
+      "name": "test",
+      "displayName": "Tests (Debug + ASan)",
+      "inherits": "base",
+      "binaryDir": "build/test",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "BUILD_TESTING": "ON",
+        "CMAKE_C_FLAGS": "-fsanitize=address,undefined",
+        "CMAKE_CXX_FLAGS": "-fsanitize=address,undefined",
+        "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=address,undefined"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "app",
+      "configurePreset": "app"
+    },
+    {
+      "name": "test",
+      "configurePreset": "test"
     }
   ]
 }
